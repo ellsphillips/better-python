@@ -1,0 +1,283 @@
+\chapter{Patterns}
+
+Design patterns were conceived in the 90s when object-oriented programming was extremely popular. So naturally, design patterns rely on classes and inheritance quite a lot. However, programming languages have evolved: Python not only has classes, but also tuples, dictionaries, Protocols and dataclasses.
+
+
+
+\section{Analysing the Factory pattern}
+
+The factory allows you to inject objects of a certain subtype into a part of an application that then uses those objects without knowing what they are exactly.
+
+Doing this helps reduce coupling by enabling you to introduce and inject new kinds of objects into that same application without having to change the code. A related principle is the \emph{``single responsibility principle''} enforcing the idea of not both creating and using something in the same place -- those are two separate responsibilities.
+
+The Open Closed principle also plays an important role in the factory pattern: we want to be able to extend the application without having to extensively change the code. The code should be \emph{open for extension but closed for modification}. The factory pattern achieves this by letting you, the developer, introduce new exporter factories without modifying the original code interface.
+
+\begin{figure}[H]
+	\resizebox{\textwidth}{!}{
+	\begin{tikzpicture}
+		\node[%
+			inner sep=-.5mm,
+			fill=monokai-orange,
+			rounded corners=1mm,
+		] (abstract-factory) {%
+			\begin{tikzpicture}
+				\node[text=monokai-bg,inner sep=3mm] (title) {\parbox{0.2\paperwidth}{\bfseries\itshape\centering AbstractFactory}};
+			%
+				\draw[thick, monokai-bg] (title.south west) -- (title.south east);
+				\draw[thick, monokai-bg] ([yshift=-3mm]title.south west) -- ([yshift=-3mm]title.south east);
+			%
+				\node[anchor=north,inner sep=3mm] (info) at ([yshift=-3mm]title.south) {%
+					\parbox{0.2\paperwidth}{%
+						\fontsize{8}{16}\selectfont\bfseries
+						\textcolor{monokai-yellow}{\normalfont\ttfamily\bfseries +}\ %
+						\itshape createProduct1() : Product 1
+						
+						\textcolor{monokai-yellow}{\normalfont\ttfamily\bfseries +}\ %
+						\itshape createProduct2() : Product 2
+					}
+				};
+			\end{tikzpicture}
+		};
+	%
+		\node[
+			anchor=north west,
+			inner sep=-.25mm,
+			draw=monokai-orange,
+			fill=monokai-bg,
+			rounded corners=1mm,
+			thick,
+		] (product-1) at ([xshift=6mm]abstract-factory.north east) {%
+			\begin{tikzpicture}
+				\node[text=monokai-fg,inner sep=3mm] (title) {\parbox{0.166\paperwidth}{\bfseries\itshape\centering Product1}};
+			%
+				\draw[thick, monokai-orange] (title.south west) -- (title.south east);
+				\draw[thick, monokai-orange] ([yshift=-3mm]title.south west) -- ([yshift=-3mm]title.south east);
+			%
+				\node[anchor=north,inner sep=3mm] (info) at ([yshift=-3mm]title.south) {};%
+			\end{tikzpicture}
+		};
+	%
+		\node[
+			anchor=north west,
+			inner sep=-.25mm,
+			draw=monokai-orange,
+			fill=monokai-bg,
+			rounded corners=1mm,
+			thick,
+		] (product-2) at ([xshift=6mm]product-1.north east) {%
+			\begin{tikzpicture}
+				\node[text=monokai-fg,inner sep=3mm] (title) {\parbox{0.166\paperwidth}{\bfseries\itshape\centering Product2}};
+			%
+				\draw[thick, monokai-orange] (title.south west) -- (title.south east);
+				\draw[thick, monokai-orange] ([yshift=-3mm]title.south west) -- ([yshift=-3mm]title.south east);
+			%
+				\node[anchor=north,inner sep=3mm] (info) at ([yshift=-3mm]title.south) {};%
+			\end{tikzpicture}
+		};
+	%
+		\node[
+			anchor=north west,
+			inner sep=-.5mm,
+			fill=monokai-green,
+			rounded corners=1mm,
+		] (client) at ([xshift=6mm]product-2.north east) {%
+			\begin{tikzpicture}
+				\node[text=monokai-bg,inner sep=3mm] (title) {\parbox{0.166\paperwidth}{\bfseries\itshape\centering Client}};
+			%
+				\draw[thick, monokai-bg] (title.south west) -- (title.south east);
+				\draw[thick, monokai-bg] ([yshift=-3mm]title.south west) -- ([yshift=-3mm]title.south east);
+			%
+				\node[anchor=north,inner sep=3mm] (info) at ([yshift=-3mm]title.south) {};%
+			\end{tikzpicture}
+		};
+	%
+	%
+	%
+		\node[%
+			anchor=north,
+			inner sep=-.5mm,
+			fill=monokai-yellow,
+			rounded corners=1mm,
+		] (concrete-factory) at ([yshift=-6mm]abstract-factory.south) {%
+			\begin{tikzpicture}
+				\node[text=monokai-bg,inner sep=3mm] (title) {\parbox{0.2\paperwidth}{\bfseries\itshape\centering ConcreteFactory}};
+			%
+				\draw[thick, monokai-bg] (title.south west) -- (title.south east);
+				\draw[thick, monokai-bg] ([yshift=-3mm]title.south west) -- ([yshift=-3mm]title.south east);
+			%
+				\node[anchor=north,inner sep=3mm] (info) at ([yshift=-3mm]title.south) {%
+					\parbox{0.2\paperwidth}{%
+						\fontsize{8}{16}\selectfont\bfseries
+						\textcolor{monokai-bg}{\normalfont\ttfamily\bfseries +}\ %
+						createProduct1() : Product 1
+						
+						\textcolor{monokai-bg}{\normalfont\ttfamily\bfseries +}\ %
+						createProduct2() : Product 2
+					}
+				};
+			\end{tikzpicture}
+		};
+	%
+		\node[
+			anchor=north west,
+			inner sep=-.25mm,
+			draw=monokai-yellow,
+			fill=monokai-bg,
+			rounded corners=1mm,
+			thick,
+		] (c-product-1) at ([xshift=6mm]concrete-factory.north east) {%
+			\begin{tikzpicture}
+				\node[text=monokai-fg,inner sep=3mm] (title) {\parbox{0.166\paperwidth}{\bfseries\itshape\centering ConcreteProduct1}};
+			%
+				\draw[thick, monokai-yellow] (title.south west) -- (title.south east);
+				\draw[thick, monokai-yellow] ([yshift=-3mm]title.south west) -- ([yshift=-3mm]title.south east);
+			%
+				\node[anchor=north,inner sep=3mm] (info) at ([yshift=-3mm]title.south) {};%
+			\end{tikzpicture}
+		};
+	%
+		\node[
+			anchor=north west,
+			inner sep=-.25mm,
+			draw=monokai-yellow,
+			fill=monokai-bg,
+			rounded corners=1mm,
+			thick,
+		] (c-product-2) at ([xshift=6mm]c-product-1.north east) {%
+			\begin{tikzpicture}
+				\node[text=monokai-fg,inner sep=3mm] (title) {\parbox{0.166\paperwidth}{\bfseries\itshape\centering ConcreteProduct2}};
+			%
+				\draw[thick, monokai-yellow] (title.south west) -- (title.south east);
+				\draw[thick, monokai-yellow] ([yshift=-3mm]title.south west) -- ([yshift=-3mm]title.south east);
+			%
+				\node[anchor=north,inner sep=3mm] (info) at ([yshift=-3mm]title.south) {};%
+			\end{tikzpicture}
+		};
+	%
+	%
+	%
+		\foreach \objfrom/\objto in {%
+			{concrete-factory}/{abstract-factory},
+			{c-product-1}/{product-1},
+			{c-product-2}/{product-2}%
+		}{%
+			\draw[
+				monokai-yellow,
+				arrows={-Triangle[open,length=3mm,width=3mm]},
+				thick,
+			] (\objfrom) -- (\objto);
+		}
+	%
+	%
+	%
+		\draw[
+			dashed,
+			draw=monokai-grey-200,
+			arrows={-Straight Barb[length=1.5mm,width=1.5mm]},
+			rounded corners=1mm,
+		] (client.north) |- ([shift={(3mm,6mm)}]abstract-factory.north) -| (abstract-factory.north);
+	%
+		\draw[
+			dashed,
+			draw=monokai-grey-200,
+			arrows={-Straight Barb[length=1.5mm,width=1.5mm]},
+			rounded corners=1mm,
+		] ([shift={(3mm,6mm)}]product-2.north) -| (product-2.north);
+	%
+		\draw[
+			dashed,
+			draw=monokai-grey-200,
+			arrows={-Straight Barb[length=1.5mm,width=1.5mm]},
+			rounded corners=1mm,
+		] ([shift={(3mm,6mm)}]product-1.north) -| (product-1.north);
+	%
+	%
+	%
+		\draw[
+			dashed,
+			draw=monokai-grey-200,
+			rounded corners=1mm,
+		] (concrete-factory.south)%
+			|- ([shift={(3mm,-24mm)}]c-product-1.east)%
+			-| ([shift={(3mm,-18mm)}]c-product-1.east);
+	%
+		\draw[
+			dashed,
+			draw=monokai-grey-200,
+			arrows={-Straight Barb[length=1.5mm,width=1.5mm]},
+			rounded corners=1mm,
+		] ([shift={(3mm,-18mm)}]c-product-1.east)%
+			|- ([shift={(0mm,-15mm)}]c-product-1.east)%
+			-| (c-product-1.south);
+	%
+		\draw[
+			dashed,
+			draw=monokai-grey-200,
+			arrows={-Straight Barb[length=1.5mm,width=1.5mm]},
+			rounded corners=1mm,
+		] ([shift={(3mm,-18mm)}]c-product-1.east)%
+			|- ([shift={(6mm,-15mm)}]c-product-1.east)%
+			-| (c-product-2.south);
+	\end{tikzpicture}
+	}
+	\caption[UML diagram]{Factory pattern Unified Modeling Language (UML) diagram, demonstrating separation of creation from use.}
+\end{figure}
+
+
+
+\section{Factories}
+
+In this section, we take a look at the factory design pattern and strip it down completely until we arrive at the design \emph{principles} that are behind the pattern. The most important design principle behind the factory pattern is to separate creation from use.
+
+
+
+\subsection{A more Pythonic Factory pattern}
+
+%\noindent In this example, we use modern Python constructs instead of the traditional classes, but bear in mind there are a few trade-offs. \newline
+
+In this example, we have \codeinline{VideoExporter} and \codeinline{AudioExporter} Abstract Base Classes (ABC) that cover various output formats, and an \codeinline{ExporterFactory} -- which is also an ABC -- that has abstract methods for creating the video and audio exporters.
+
+\begin{monokai}{python}{
+	prepare_export,
+	do_export,
+}
+  class VideoExporter(Protocol):
+      """Basic representation of video exporting codec."""
+       
+      def prepare_export(self, ¬video_data¬: str) -> None:
+          """Prepares video data for exporting."""
+          raise NotImplementedError
+       
+      def do_export(self, ¬folder¬: Path) -> None:
+          """Exports the video data to a folder."""
+          raise NotImplementedError
+\end{monokai}
+
+This user can choose to use the fast, high or master quality exporter to render their video and audio files, of which these are subclasses of the exporter factory. To facilitate these different factories, we create an object a dictionary \codeinline[white]{FACTORIES} and define a method \codeinline[monokai-green]{read_factory()} to read the user's desired output quality as input, get the corresponding factory to use the appropriate video and audio exporters, and then prepares and does the export.
+
+\begin{monokai}{python}{
+	read_factory,
+	FastExporter,
+	HighQualityExporter,
+	MasterQualityExporter,
+	join,
+	input,
+}
+  FACTORIES = {
+      "low": FastExporter(),
+      "high": HighQualityExporter(),
+      "master": MasterQualityExporter(),
+  }
+  
+  def read_factory() -> ExporterFactory:
+      """Constructs an exporter factory based on the user's preference."""
+       
+      while True:
+          export_quality = input(
+              (*@\slshape\color{monokai-blue}f@*)"Enter desired output quality ({', '(*@\color{monokai-grey-200}.\color{monokai-green}join\color{monokai-grey-200}(\color{monokai-blue}FACTORIES\color{monokai-grey-200})@*)}): "
+          )
+          try:
+              return FACTORIES[export_quality]
+          except KeyError:
+              print((*@\slshape\color{monokai-blue}f@*)"Unknown output quality option: {(*@\color{white}export_quality@*)}.")
+\end{monokai}

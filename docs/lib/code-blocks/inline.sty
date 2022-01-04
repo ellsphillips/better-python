@@ -1,0 +1,99 @@
+\newlength{\charwidth}
+\setlength{\charwidth}{1em}
+
+\newcommand*{\codeinline}[2][white]{%
+	\lineskiplimit=-\maxdimen
+%	\pgfmathparse{#1}%
+	\edef\codeshrinkpadding{1pt}%
+%	\edef\codebgtrim{\pgfmathresult}%
+	\relax\tikz[baseline=(code.base)]{%
+		\node[] (code) {%
+			\lstinline[%
+				backgroundcolor=\color{monokai-code-bg},
+				language=monokai-python,
+				keepspaces=true,
+				basicstyle=\codefontsize\normalfont\ttfamily\color{#1},
+				literate=
+					{def\ }{{{\slshape\color{monokai-blue}def\ }}}4
+					{-\ }{{{\color{monokai-pink}-\ }}}2
+					{->}{{{\color{monokai-grey-400}->}}}2
+					{+}{{{\color{monokai-pink}+}}}1
+					{/\ }{{{\color{monokai-pink}/\ }}}2
+					{*}{{{\tsstring{monokai-pink}{monokai-yellow}*}}}1
+					{=}{{{\color{monokai-pink}=}}}1
+					{==}{{{\color{monokai-pink}==}}}2
+					{===}{{{\color{monokai-pink}===}}}3
+					{<}{{{\color{monokai-grey-200}<}}}1
+					{<=}{{{\color{monokai-pink}<=}}}2
+					{\ <\ }{{{\tsstring{monokai-pink}{monokai-yellow}\ <\ }}}3
+					{>}{{{\color{monokai-grey-200}>}}}1
+					{>=}{{{\color{monokai-pink}>=}}}2
+					{\ >\ }{{{\tsstring{monokai-pink}{monokai-yellow}\ >\ }}}3
+					{?}{{{\color{monokai-pink}?}}}1
+					{??}{{{\color{monokai-pink}??}}}2
+					{?.}{{{\tsstring{monokai-grey-200}{monokai-yellow}?.}}}2
+					{\&}{{{\tsstring{monokai-pink}{monokai-yellow}\&}}}1
+					{\$}{{{\tsstring{white}{monokai-pink}\$}}}1
+					{:}{{{\tsstring{monokai-grey-200}{monokai-yellow}:}}}1
+					{;}{{{\tsstring{monokai-grey-200}{monokai-yellow};}}}1
+					{\ !}{{{\tsstring{monokai-pink}{monokai-yellow}\ !}}}2
+					{.}{{{\tsstring{monokai-grey-200}{monokai-yellow}.}}}1
+					{,}{{{\tsstring{monokai-grey-200}{monokai-yellow},}}}1
+					{[}{{\tsstring{monokai-grey-200}{monokai-yellow}[}}{1}
+					{]}{{\tsstring{monokai-grey-200}{monokai-yellow}]}}{1}
+					{(}{{\tsstring{monokai-grey-200}{monokai-yellow}(}}{1}
+					{)}{{\tsstring{monokai-grey-200}{monokai-yellow})}}{1}
+					{\{}{{\tsstring{monokai-grey-200}{monokai-pink}\{}}{1}
+					{\}}{{\tsstring{monokai-grey-200}{monokai-pink}\}}}{1}
+					{\%}{{{\tsstring{monokai-pink}{monokai-yellow}\%}}}1
+					{|}{{{\tsstring{monokai-pink}{monokai-yellow}|}}}1
+					{null}{{{\color{monokai-purple}null}}}4
+					{true}{{{\color{monokai-purple}true}}}4
+					{false}{{{\color{monokai-purple}false}}}5
+					{undefined}{{{\color{monokai-purple}undefined}}}9
+					{extends}{{{\slshape\color{monokai-pink}extends}}}7
+					{0}{{{\tsstring{monokai-purple}{monokai-yellow}0}}}1
+					{1}{{{\tsstring{monokai-purple}{monokai-yellow}1}}}1
+					{2}{{{\tsstring{monokai-purple}{monokai-yellow}2}}}1
+					{3}{{{\tsstring{monokai-purple}{monokai-yellow}3}}}1
+					{4}{{{\tsstring{monokai-purple}{monokai-yellow}4}}}1
+					{5}{{{\tsstring{monokai-purple}{monokai-yellow}5}}}1
+					{6}{{{\tsstring{monokai-purple}{monokai-yellow}6}}}1
+					{7}{{{\tsstring{monokai-purple}{monokai-yellow}7}}}1
+					{8}{{{\tsstring{monokai-purple}{monokai-yellow}8}}}1
+					{9}{{{\tsstring{monokai-purple}{monokai-yellow}9}}}1
+					{.0}{{{\tsstring{monokai-purple}{monokai-yellow}0}}}2
+					{.1}{{{\tsstring{monokai-purple}{monokai-yellow}.1}}}2
+					{.2}{{{\tsstring{monokai-purple}{monokai-yellow}.2}}}2
+					{.3}{{{\tsstring{monokai-purple}{monokai-yellow}.3}}}2
+					{.4}{{{\tsstring{monokai-purple}{monokai-yellow}.4}}}2
+					{.5}{{{\tsstring{monokai-purple}{monokai-yellow}.5}}}2
+					{.6}{{{\tsstring{monokai-purple}{monokai-yellow}.6}}}2
+					{.7}{{{\tsstring{monokai-purple}{monokai-yellow}.7}}}2
+					{.8}{{{\tsstring{monokai-purple}{monokai-yellow}.8}}}2
+					{.9}{{{\tsstring{monokai-purple}{monokai-yellow}.9}}}2,
+			]{#2}%
+		};%
+	%
+		\begin{pgfonlayer}{background}%
+			\node[anchor=south west] (code-mirror) at ([xshift=0pt]code.south west) {%
+				\codefontsize\ttfamily\color{white}#2%
+			};%
+		%
+			\fill[monokai-bg]%
+			(code-mirror.north west)%
+			rectangle%
+			(code-mirror.south east);%
+		%
+			\fill[%
+				monokai-code-bg,%
+				draw=none,%
+				rounded corners=2pt,%
+				inner sep=3pt,%
+			]%
+			([shift={(\codeshrinkpadding, 1pt+\codeshrinkpadding)}]code-mirror.south west)%
+			rectangle%
+			([shift={(-\codeshrinkpadding, -\codeshrinkpadding)}]code-mirror.north east);%
+		\end{pgfonlayer}%
+	}\relax%
+}

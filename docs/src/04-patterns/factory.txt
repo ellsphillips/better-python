@@ -1,0 +1,1146 @@
+design patterns were conceived in the
+
+90s when object-oriented programming was
+
+extremely popular so naturally design
+
+patterns rely on classes and inheritance
+
+quite a lot however programming
+
+languages have evolved python not only
+
+has classes but also tuples dictionaries
+
+protocol classes and data classes what
+
+i'm going to do in today's video is take
+
+one design pattern the factory strip it
+
+down completely until we arrive at the
+
+design principles that are behind the
+
+pattern
+
+and then i'll investigate if it's
+
+possible to do the same thing but better
+
+using modern python construct instead of
+
+the traditional classes spoiler alert
+
+it's possible but there are a few
+
+trade-offs before we start i have a free
+
+guide for you that helps you make better
+
+design decisions in seven simple steps
+
+you can get it at ioncodes.com
+
+design guide i've tried to keep it short
+
+and to the point so you can get the
+
+information quickly and apply it
+
+immediately to what you're working on so
+
+ioncodes.com
+
+design guide now let's look into the
+
+example here you see a basic example of
+
+using a factory pattern this is an
+
+example that i covered in an earlier
+
+video i put the link to that video in
+
+the description below 
+
+
+
+
+
+basically the idea
+
+is we have a video exporter which is an
+
+abstract base class that has
+
+lossless version and
+
+h.264 bp version
+
+and a high quality version
+
+and we have an audio exporter
+
+that has different formats as well ac
+
+wav etc
+
+and then we have the actual factory
+
+which is also an abc
+
+that has abstract methods one to create
+
+video exporter in order to get an audio
+
+exporter
+
+then we have a
+
+fast exporter and a high quality
+
+exporter which are both subclasses of
+
+this exporter factory and then finally
+
+we create an object a dictionary in this
+
+case to contain these different
+
+factories
+
+we have a method called read factory
+
+that reads an desired output quality
+
+from the input
+
+and then when we do the export it gets
+
+the factory it retrieves the video and
+
+audio exporters and then prepares and
+
+does the export 
+
+
+
+
+
+The most important design
+
+principle behind the factory pattern is
+
+to separate creation from use.
+
+
+\textcolor{red}{here's a UML diagram}
+
+
+
+The factory allows
+
+you to inject objects of a
+
+certain subtype into a part of an
+
+application that then uses those objects
+
+without knowing what they are exactly.
+
+
+
+Doing this helps reduce coupling by enabling you to introduce and inject
+
+new kinds of objects into that same application without
+
+having to change the code. A related
+
+principle is the \emph{``single responsibility principle''} enforcing the idea of not both creating and
+
+using something in the same place -- those
+
+are two separate responsibilities. 
+
+
+The Open Closed principle also plays an
+
+important role in the factory pattern: we want to be able to
+
+extend the application without having to
+
+extensively change the code. The code should be
+
+\emph{open for extension but closed for modification}. In this example, the
+
+factory pattern achieves this by letting you, the developer,
+
+introduce new exporter factories without modifying the original code interface.
+
+
+
+
+
+the first change that we're going to
+
+look into is using protocol classes
+
+instead of abstract base classes now
+
+what is a protocol this was introduced
+
+in python 3.8 and it behaves a bit like
+
+an interface if you know language like
+
+typescript or java the difference is
+
+that you don't need to explicitly
+
+implement the protocol in a class you
+
+don't need to inherit from it to use it
+
+and the result is that your class
+
+definitions become a bit shorter
+
+abcs rely on so-called nominal typing
+
+and that means that if you want types to
+
+be related in some way you need to
+
+explicitly write that down like for
+
+example inheriting from a particular
+
+class
+
+protocols are different they rely on
+
+structural typing and this means that
+
+python considers objects of matching
+
+types if their structures are the same
+
+for example if objects have the same
+
+methods this matches a lot better with
+
+python's runtime type checking system
+
+that treats basically objects the same
+
+if they look and behave the same within
+
+that particular context
+
+and this is also what's called doctyping
+
+so
+
+let's change the example and start using
+
+protocols and see what the effect is so
+
+you see here we have the abstract base
+
+class and abstract method that we
+
+imported here so what we're going to do
+
+is add an extra import we're going to
+
+import protocols
+
+so we've now imported the protocol type
+
+i'm going to delete this because we
+
+won't need this anymore and now video
+
+exporter is going to be
+
+a protocol class
+
+there we go and we're going to remove
+
+this abstract methods here so it's apart
+
+from it being a subclass of protocol
+
+it is exactly the same it has a prepare
+
+export and the do export method and now
+
+for the classes that implement this
+
+protocol that adhere to this protocol we
+
+don't need to write explicitly anymore
+
+that they're a subclass of video
+
+exporter so i'm going to
+
+remove this
+
+there we have our
+
+different types of video exporters that
+
+we now use without inheritance which is
+
+how you would do things by default when
+
+using protocols
+
+for audio exports we're going to do the
+
+same thing
+
+so that's the protocol
+
+we no longer write abstract methods and
+
+when we're creating these subclasses
+
+or actually we're not creating
+
+subclasses anymore we're simply removing
+
+the inheritance relationship and let
+
+python's structural typing do the job
+
+and the same thing we're going to do
+
+with the actual factory class
+
+so that's also a protocol
+
+without abstract methods
+
+and
+
+let's remove the inheritance
+
+relationships as well
+
+you can by the way still use inheritance
+
+even when you have a protocol class but
+
+i'll talk about that in a minute
+
+so here we go
+
+the rest of the code actually doesn't
+
+change at all when you're using
+
+protocols this is simply a way of
+
+changing the relationship that exists
+
+between these different exporters and
+
+the factories let's run this code one
+
+more time to check that this is still
+
+working
+
+exporting this in master quality and
+
+this still works as expected overall i
+
+think in python protocols are the way to
+
+go over abstract based classes until
+
+recently i've been relying on abstract
+
+base classes in most of my videos but as
+
+you can see protocols offer the same
+
+functionality and even offer a bit of
+
+extra flexibility there are a few
+
+caveats of protocols that you need to be
+
+aware of for one if you're not using
+
+inheritance it also means that you're
+
+losing some of the capabilities that
+
+inheritance offers like doing partial
+
+implementations in a superclass and
+
+things like that if you're not
+
+explicitly inheriting from a class then
+
+the type checker in your ide can help
+
+you with pointing out errors in your
+
+method definitions here second thing is
+
+that you can use protocols like an
+
+abstract base class and actually inherit
+
+from them you can even add the abstract
+
+method decorator to the methods inside
+
+the protocol class and that also is kind
+
+of a problem in the sense that
+
+i was expecting protocol to be more like
+
+an interface but for python but it seems
+
+it's way more than that and that also
+
+kind of muddies the water a bit
+
+and i think
+
+that possibly leads to confusion in the
+
+way that people are going to want to use
+
+this so
+
+what i would recommend is if you can get
+
+away with it use protocols like an
+
+interface so don't inherit from them
+
+directly but simply use them to define a
+
+contract of what a method is expecting
+
+in terms of an object with methods etc
+
+if you have to use inheritance
+
+i'd say
+
+use abstract based classes because
+
+they're more the target use case for
+
+that scenario even though you could use
+
+it with protocols but it's also nice to
+
+keep things separate but to be honest
+
+i'm not really sure what to recommend
+
+here because what is the exact future of
+
+protocols is not entirely clear to me if
+
+you have a suggestion of what the best
+
+practice should be for when we should
+
+use protocols versus abstract based
+
+classes let me know in the comments so
+
+the second change we're going to do is
+
+to use tuples instead of these factory
+
+classes so you see that if we take a
+
+look at these
+
+actual factory classes and what they
+
+actually do is they're basically not a
+
+lot more than being a container of
+
+objects factory is basically a container
+
+of a video exporter and an audio
+
+exporter object or actually of functions
+
+that create those objects for us and
+
+we're using the subclass mechanism here
+
+to create different variants of those
+
+video and audio exporters but we could
+
+basically simplify this a lot by not
+
+using classes here but using tuples
+
+which are also kind of containers of
+
+objects so instead of passing factories
+
+around we could pass tuples around and
+
+still have the advantage of not having
+
+to know the specific types of video and
+
+audio exporters that we need so let's
+
+change this to use tuples instead of
+
+these factory classes and that means
+
+we're going to have to change this
+
+dictionary to return
+
+tuples instead of factories so
+
+let's start with the
+
+low quality
+
+factory and then this is going to be a
+
+tuple
+
+of the h 264 bp video exporter class
+
+and the aac
+
+audio exporter class so it's a tuple of
+
+classes and then we're going to call the
+
+initializers later on
+
+and for the high quality exporter tuple
+
+i'm going to do the same thing so this
+
+is actually an a to
+
+h.264
+
+high video exporter and a
+
+aac audio exporter and then we have the
+
+master quality
+
+which is yet another tuple which is a
+
+lossless video exporter
+
+and a wave audio exporter
+
+so this gives us a bunch of tuples that
+
+contain combinations of video and audio
+
+exporters
+
+so let's see what we need to change them
+
+in the read factory method because this
+
+shouldn't return an exporter factory
+
+anymore because we're not using that
+
+we're using tuples so this should return
+
+a tuple of video exporter and audio
+
+exporter so let's declare that type here
+
+so this is a tuple
+
+and it's a tuple containing a video
+
+exporter
+
+and an
+
+audio exporter so now we need to also
+
+slightly change the code here because
+
+we're not returning directly the factory
+
+object because those are classes they're
+
+not
+
+actual instances we're going to create
+
+the instances here so let's first
+
+extract the classes from the the
+
+factory's dictionary and then we're
+
+going to create the instances so we have
+
+let's say video class and
+
+audio class
+
+and this is
+
+factories
+
+of exporter quality
+
+so you see that video class is a
+
+type
+
+video exporter and audio is a type audio
+
+exporter and then what we're going to
+
+return is a tuple
+
+that calls the initializer method
+
+right so now read factory returns a
+
+tuple and the tuple is created here from
+
+these two classes that we got from the
+
+dictionary and then let's look at this
+
+part so we have a do
+
+export method that at the moment gets an
+
+exporter factory
+
+so we should change this so that now it
+
+gets
+
+also a tuple
+
+a video exporter and audio exporter and
+
+then retrieving the exporter we can do
+
+that again by destructuring the tuple
+
+like so and then i'll delete these two
+
+lines and actually in the
+
+main function we don't need to change
+
+anything because read factory that gives
+
+us a tuple and do export
+
+expects a tuple so this should all just
+
+be fine so let me run this code and just
+
+verify that this works
+
+and you see that the code that's
+
+responsible for doing the actual export
+
+still doesn't need to know anything
+
+about particular subclasses but specific
+
+types of video audio exporters it also
+
+doesn't need to know anything about the
+
+possible combinations that there are
+
+because the
+
+the factory's dictionary is hiding that
+
+information for us and because we're now
+
+using tuples it means that we're not
+
+going to need all of these factory
+
+pattern classes anymore so
+
+let's remove them
+
+so we have the exporter factory we don't
+
+need anymore
+
+and
+
+let's remove this as well
+
+so
+
+the master we don't need anymore there
+
+there we go so we've now reduced the
+
+amount of code that we need to write by
+
+using tuples there's a couple of things
+
+you need to be aware of when you're
+
+using tuples the first is that they're
+
+simply containers of objects for which
+
+they're doing a very good job they're
+
+very efficient but if you want to add
+
+for example configuration data to a
+
+tuple let's say you want to have some
+
+settings of your video or audio exporter
+
+alongside those objects then this can
+
+become ugly pretty quickly a second
+
+issue is that all combinations of video
+
+and audio exporters are now explicitly
+
+written down in the factory's dictionary
+
+if you have a lot of these combinations
+
+this may lead to a loss of cohesion in
+
+that part of your application and the
+
+final thing with tuples is that you need
+
+to remember the order of the exporters
+
+everywhere so video export first then
+
+audio exporter it's not a big deal but
+
+it's yet another point where you could
+
+make a mistake you could use named
+
+tuples to get around that but i actually
+
+prefer a nicer option that uses data
+
+classes and the call dunder method so
+
+let's look into that so final change i'm
+
+going to make is to add back a bit of
+
+flexibility by replacing tuples with
+
+data classes and that's going to provide
+
+us with an easier access to video and
+
+audio exporters but still allow some of
+
+the flexibility that classes offer us
+
+such as setting parameters or having
+
+more control over object construction so
+
+first let's import data classes so we
+
+can start using them
+
+there we go and
+
+now
+
+let's scroll down i'm going to create
+
+two classes
+
+and the first class
+
+is a
+
+media exporter class so this is a data
+
+class
+
+so we have media exporter
+
+which has two objects
+
+a video exporter object
+
+and an audio exporter object and instead
+
+of factory creating on the fly instances
+
+of video and audi export it's going to
+
+create an instance of media exporter for
+
+us so what we'll do is create another
+
+data class which is going to be the
+
+actual factory for these media exporters
+
+so let's call that a
+
+media exporter factory
+
+and
+
+this is going to have two classes just
+
+like we had in the tuple
+
+so we have a
+
+video class
+
+just import type for that so that's
+
+a video exporter class and we have an
+
+audio class
+
+and that's of type
+
+audio exporter class there we go so
+
+that's our factory
+
+and now to make things simple what we
+
+could do is use the call dunder method
+
+to make it really easy to construct
+
+video and audio exporter instances for
+
+us so i'm going to
+
+define the
+
+call donder method here
+
+and that's going to return a
+
+media exporter instance doing that is
+
+really simple
+
+we're creating a media exporter
+
+and that's going to get
+
+a video class and
+
+audio class calls that's going to
+
+construct for us the specific video and
+
+audio exporters that we need so that's
+
+our media exporter factory class and now
+
+instead of these tuples what we do is
+
+we're creating media exporter factories
+
+instead
+
+and
+
+i don't need to change anything here
+
+because that's basically already there
+
+it expects two classes video and audio
+
+class
+
+i need to paste it there and let's also
+
+go there
+
+so now we've created our media exporter
+
+factory
+
+and
+
+that means that read
+
+factory also needs the media exporter
+
+factory so that's what it's going to
+
+return and then we can go in and
+
+simplify
+
+this again because now we simply need to
+
+return the object that's in the
+
+dictionary
+
+let's remove this and this line we don't
+
+need anymore so now read factory is
+
+going to return a media
+
+exporter factory and i think i have an
+
+extra space there that i need to remove
+
+there we go so the do export function
+
+now won't get a factory anymore it's
+
+going to get a media exporter so let me
+
+remove
+
+all of this
+
+and it's going to get an
+
+exporter and that's of type
+
+media exporter and
+
+we don't need to retrieve video on audio
+
+export explicitly anymore but we can
+
+simply call
+
+exporter.video dot so let's change that
+
+here
+
+and the same thing for the audio
+
+there we go and let's do the same thing
+
+here
+
+and this is not correct
+
+and only thing we need to change still
+
+is that in the main function so here
+
+we're creating the media exporter
+
+factory and when we do the export we
+
+actually use the factory to create the
+
+actual media exporter so let's add a
+
+line here to create the media exporter
+
+and because we defined the call dunder
+
+method we can simply call the factory as
+
+follows and this is going to create our
+
+media exporter for us and then the only
+
+thing we need to do is replace factory
+
+by media exporter
+
+and let's run this code one more time
+
+so you see the effect is exactly the
+
+same except now because we're dealing
+
+with data class we have much easier
+
+access to video and audio components of
+
+the exporter and we're not making any
+
+mistakes in the ordering or something
+
+like that
+
+there's still the issue that
+
+media exporter factory explicitly calls
+
+the
+
+video class and audio class initializes
+
+here so you still have little control
+
+over the actual parameters that you
+
+might optionally want to pass into these
+
+initializers so you can do that
+
+but of course eventually you could
+
+create if you wanted to sub classes of
+
+media exporter factory but then you're
+
+kind of going back to the original
+
+factory pattern idea so overall if you
+
+look at what we've achieved now is that
+
+we've been using protocol
+
+to simplify the inheritance
+
+relationships between the different
+
+exporter types which i think is really
+
+nice and makes the code really nice and
+
+simple it still behaves like a factory
+
+so the
+
+part of the code that does the actual
+
+export like the do export method doesn't
+
+know anything about the specific type of
+
+video and audio exporters that it gets
+
+and
+
+by using data classes and the
+
+combination of the call dunder methods
+
+we have a very simple clean way of
+
+creating our exporters that we need
+
+so there's also a disadvantage to using
+
+data classes as opposed to something
+
+like tuples or even name tuples which is
+
+that tuples generally are a bit more
+
+lightweight so they have faster element
+
+access and use less memory than data
+
+classes and they're immutable and data
+
+classes are not so if those things are
+
+important for you
+
+use tuples but personally in most cases
+
+i would actually go with data classes
+
+because i think it just is a nicer
+
+solution overall so protocols integrate
+
+very well with python's doctyping system
+
+and are often the preferred solution
+
+over abstract based classes though it's
+
+not entirely clear where they're going
+
+with this in the future tuples are also
+
+really nice but they're very basic
+
+containers of objects and they open up
+
+possibilities of losing cohesion in some
+
+parts of your application because of
+
+that
+
+and finally if you're using data classes
+
+with the call dunder method is also a
+
+really nice clean approach to achieve
+
+the same thing
+
+but data classes also use a bit more
+
+memory and are a bit slower at accessing
+
+the elements than say tuple or named
+
+tuple let me know in the comments which
+
+of these versions you prefer and if you
+
+have another suggestion for solving this
+
+using python features i'd be very
+
+interested to hear more about it so
+
+please post it in the comments so that's
+
+it for today thanks for watching take
+
+care and see you next time
+

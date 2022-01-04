@@ -1,0 +1,36 @@
+\title{Better Python}
+\subtitle{Software development \& design introductory handbook}
+\author{Elliott Phillips}
+\credential{Data Scientist}
+\credential{BSc OR $\bm{\mathrm{III}}$}
+\date{\today}
+
+\frontpage
+
+%\blankpage
+%
+{ % Document setup
+	\makeatletter
+		\@twosidetrue
+		\@openrighttrue
+	\makeatother
+	
+	\ifodd\thepage\relax\else%
+%		\blankpage
+		\thispagestyle{empty}
+		\tikz[overlay]\node[anchor=west] at ([shift={(0\marginparwidth,-\paperheight-2cm)}]current page.west) {%
+			Better Python: software design-focused learning materials to build maintainable, \emph{extendable} code.%
+		};
+		\newpage
+	\fi
+	
+%	\chaptertabs
+	
+	\setcounter{page}{1}
+}
+
+\input{src/01-about/init}
+
+\input{src/04-patterns/init}
+
+\input{src/99-testing/init}
