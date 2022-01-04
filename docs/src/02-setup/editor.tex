@@ -1,0 +1,41 @@
+\subsection{Configuration}
+
+Settings used for Python development in VS Code:
+
+\begin{verbatim}
+    {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[python]": {
+            "editor.defaultFormatter": null
+        },
+        "editor.formatOnSaveMode": "file",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+        "python.linting.pylintEnabled": true,
+        "python.linting.mypyEnabled": true,
+        "python.linting.enabled": true,
+        "python.analysis.typeCheckingNode": "strict",
+        "python.formatting.provider": "black",
+        "vim.smartRelativeLine": true
+    }
+\end{verbatim}
+
+Placing this \texttt{settings.json} file in the project workspace means any other developer that directly works on this code will also have the same editor settings, which is convenient.
+
+As an automatic code formatter, \emph{Black} is very opinionated and works well for my use and preferences.
+
+\subsection{Linting}
+
+Using \emph{Pylint}, we can create a customg linting configuration dotfile, \texttt{.pylintrc}.
+
+\begin{verbatim}
+    [MASTER]
+    docstring-min-length=10
+    disable=missing-function-docstring,
+            missing-class-docstring,
+            missing-module-docstring
+    [FORMAT]
+    good-names=i,j,x,y,id
+\end{verbatim}
