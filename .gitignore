@@ -18,6 +18,11 @@ document/src/tables/
 
 
 
+### VSCode ###
+.vscode/
+
+
+
 ### TeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
